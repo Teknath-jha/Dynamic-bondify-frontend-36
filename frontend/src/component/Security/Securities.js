@@ -12,18 +12,6 @@ import './CSS/Securities/Security.css';
 
 
 
-const categories = [
-    "Calculator",
-    "SmartPhones",
-    "Laptop",
-    "Books",
-    "Drafter",
-    "Apron",
-    "Keyboard",
-    "Mouse",
-    "Camera",
-    "other"
-];
 
 const Securities = () => {
     const alert = useAlert();
