@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect,useState } from "react";
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -34,7 +35,28 @@ const Trade = () => {
         message,
     } = useSelector((state) => state.profile);
 
-    useEffect(() => {
+    const [feedTable, setFeedTable] = useState([]);
+    const [inner, setInner] = useState([]);
+
+    useEffect(async () => {
+
+        axios.get('http://localhost:8080/api/v1/trades/get')
+        .then(response => {
+            const dump = response.data;
+          setFeedTable(dump);
+          
+          console.log(response.data);
+          console.log("Hi ye ");
+          console.log(feedTable);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+        
+        console.log(feedTable);
+        
+        
+
         if (error) {
             alert.error(error);
             dispatch(clearErrors());
@@ -53,57 +75,57 @@ const Trade = () => {
                 navigate("/login");
             dispatch({ type: DELETE_USER_RESET });
         }
-        dispatch(getAllUsers());
+        // dispatch(getAllUsers());
     }, [dispatch, alert, error, user, deleteError, navigate, isDeleted, message]);
 
-    const rows = [
-        {
-            "id": 1, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 2, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 3, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 4, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 5, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 6, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 7, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 8, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 9, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 10, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
-        {
-            "id": 11, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
-            { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
-        },
+    // const rows = [
+    //     {
+    //         "id": 1, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 2, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 3, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 4, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 5, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 6, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 7, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 8, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 9, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 10, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
+    //     {
+    //         "id": 11, "BookID": 1, "CounterpartyID": 1, "SecurityID": 10, "Quantity": "3", "Status": "completed", "Price": 88000, "Buy_Sell": "Buy", "TradeDate": "01-01-2023", "SettlementDate": "01-05-2023", "securities": [{ "id": 1, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" },
+    //         { "id": 2, "ISIN": "123456", "CUSIP": "78904563", "Issuer": "Dog", "MaturityDate": "01-01-2023", "Coupon": "hello", "Type": "Government", "FaceValue": "89000", "Status": "completed" }]
+    //     },
 
 
-    ]
+    // ]
 
     function Row(props) {
         const { row } = props;
@@ -111,7 +133,7 @@ const Trade = () => {
 
         return (
             <React.Fragment>
-                <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
                     <TableCell>
                         <IconButton
                             aria-label="expand row"
@@ -122,18 +144,18 @@ const Trade = () => {
                         </IconButton>
                     </TableCell>
                     <TableCell component="th" scope="row">
-                        {row.id}
+                        {feedTable.tradeId}
                     </TableCell>
-                    {/* <TableCell align="right">{row.id}</TableCell> */}
-                    <TableCell align="center">{row.BookID}</TableCell>
-                    <TableCell align="center">{row.CounterpartyID}</TableCell>
-                    <TableCell align="center">{row.SecurityID}</TableCell>
-                    <TableCell align="center">{row.Quantity}</TableCell>
-                    <TableCell align="center">{row.Status}</TableCell>
-                    <TableCell align="center">{row.Price}</TableCell>
-                    <TableCell align="center">{row.Buy_Sell}</TableCell>
-                    <TableCell align="center">{row.TradeDate}</TableCell>
-                    <TableCell align="center">{row.SettlementDate}</TableCell>
+                    {/* <TableCell align="right">{feedTable.id}</TableCell> */}
+                    <TableCell align="center">{feedTable.bookId}</TableCell>
+                    <TableCell align="center">{feedTable.counterpartyId}</TableCell>
+                    <TableCell align="center">{feedTable.securityId}</TableCell>
+                    <TableCell align="center">{feedTable.quantity}</TableCell>
+                    <TableCell align="center">{feedTable.status}</TableCell>
+                    <TableCell align="center">{feedTable.price}</TableCell>
+                    <TableCell align="center">{feedTable.buy_sell}</TableCell>
+                    <TableCell align="center">{feedTable.tradeDate}</TableCell>
+                    <TableCell align="center">{feedTable.settlementDate}</TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -156,7 +178,7 @@ const Trade = () => {
                                             <TableCell>Status</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
+                                    {/* <TableBody>
                                         {row.securities.map((securityRow) => (
                                             <TableRow key={securityRow.id}>
                                                 <TableCell component="th" scope="row">
@@ -173,7 +195,7 @@ const Trade = () => {
 
                                             </TableRow>
                                         ))}
-                                    </TableBody>
+                                    </TableBody> */}
                                 </Table>
                             </Box>
                         </Collapse>
@@ -185,16 +207,7 @@ const Trade = () => {
         );
     }
 
-    // users &&
-    //     users.forEach((item) => {
-    //         rows.push({
-    //             id: item._id,
-    //             role: item.role,
-    //             email: item.email,
-    //             phone:item.phone,
-    //             name: item.name,
-    //         });
-    //     });
+   
 
     return (
         <>
@@ -222,8 +235,8 @@ const Trade = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
-                                    <Row key={row.name} row={row} />
+                                {feedTable.map((row) => (
+                                    <Row key={row.name} row={row}  />
                                 ))}
                             </TableBody>
                         </Table>
