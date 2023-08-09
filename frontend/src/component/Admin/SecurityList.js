@@ -28,7 +28,6 @@ const SecurityList = () => {
     } = useSelector((state) => state.profile);
 
     useEffect(async () => {
-   
         axios.get('http://localhost:8080/api/v1/securities/get')
           .then(response => {
             setFeedTable(response.data);
@@ -38,10 +37,8 @@ const SecurityList = () => {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
+          
         console.log(feedTable);
-  
-
-
         if (error) {
             alert.error(error);
             dispatch(clearErrors());

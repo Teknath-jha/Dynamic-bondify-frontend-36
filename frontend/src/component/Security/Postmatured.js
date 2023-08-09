@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { DataGrid } from "@material-ui/data-grid";
 import {
     Dialog,
@@ -24,6 +25,7 @@ const PostMatured = () => {
 
     const { error, users } = useSelector((state) => state.allUsers);
     const {user} = useSelector((state) => state.user);
+    const [feedTable, setFeedTable] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [openModal, setOpenModal] = useState(false);
 
@@ -34,6 +36,28 @@ const PostMatured = () => {
     } = useSelector((state) => state.profile);
 
     useEffect(() => {
+        console.log("feedTable State Updated:", feedTable);
+    
+        // Perform actions that rely on the updated feedTable here
+        // For example, mapping over the feedTable data, processing it, etc.
+    }, [feedTable]);
+
+    useEffect( () => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/v1/securities/get/maturing');
+                console.log("API Response:", response.data);
+                
+                setFeedTable(response.data);
+                console.log("feedTable State:", feedTable); // Log the feedTable state
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+          
+        console.log(feedTable);
         if (error) {
             alert.error(error);
             dispatch(clearErrors());
@@ -55,7 +79,6 @@ const PostMatured = () => {
         dispatch(getAllUsers());
     }, [dispatch, alert, error,user,deleteError, navigate, isDeleted, message]);
 
-
     const handleRowClick = (params) => {
         setSelectedRow(params.row);
         setOpenModal(true);
@@ -67,114 +90,90 @@ const PostMatured = () => {
       };
 
     const columns = [
-        { field: "id", headerName: "ID", minWidth: 170, flex: 0.1,  },
+        { field: "securityId", headerName: "securityId", minWidth: 170, flex: 0.1,  },
 
         {
-            field: "ISIN",
-            headerName: "ISIN",
+            field: "isin",
+            headerName: "isin",
             minWidth: 200,
         },
         {
-            field: "CUSIP",
-            headerName: "CUSIP",
+            field: "cusip",
+            headerName: "cusip",
             minWidth: 150,
         },
         {
-            field: "Issuer",
-            headerName: "Issuer",
-            minWidth: 150,
-        },
-
-        {
-            field: "MaturityDate",
-            headerName: "MaturityDate",
+            field: "issuer",
+            headerName: "issuer",
             minWidth: 150,
         },
 
         {
-            field: "Coupon",
-            headerName: "Coupon",
+            field: "maturityDate",
+            headerName: "maturityDate",
             minWidth: 150,
         },
 
         {
-            field: "Type",
-            headerName: "Type",
+            field: "coupon",
+            headerName: "coupon",
             minWidth: 150,
         },
 
         {
-            field: "FaceValue",
-            headerName: "FaceValue",
+            field: "type",
+            headerName: "type",
             minWidth: 150,
         },
 
         {
-            field: "Status",
-            headerName: "Status",
+            field: "faceValue",
+            headerName: "faceValue",
+            minWidth: 150,
+        },
+
+        {
+            field: "status",
+            headerName: "status",
             minWidth: 150,
         },
     ];
 
-    const rows = [
-        {"id":1, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"},
-        {"id":2, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"},
-        {"id":3, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"},
-        {"id":4, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"},
-        {"id":5, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"},
-        {"id":6, "ISIN":"123456", "CUSIP":"78904563", "Issuer":"Dog", "MaturityDate":"01-01-2023", "Coupon":"hello", "Type":"Government", "FaceValue":"89000", "Status":"pending"}
-    ]
+    const securityReason = ["Administrative Oversight","Lack of Funds","Market Volatility",
+    "Legal Disputes",
+    "Documentation Issues",
+    "Operational Delays",
+    "Communication Breakdown",
+    "Liquidity Challenges",
+    "Counterparty Default",
+    "Regulatory Compliance"]
 
-    // users &&
-    //     users.forEach((item) => {
-    //         rows.push({
-    //             id: item._id,
-    //             role: item.role,
-    //             email: item.email,
-    //             phone:item.phone,
-    //             name: item.name,
-    //         });
-    //     });
-
+   
     return (
         <>
-            <MetaData title={`Security`} />
+            {/* Conditional rendering */}
+            {feedTable.length ? (
+                <div className="dashboard">
+                    <SideBar />
+                    <div className="productListContainer">
+                        <h1 id="productListHeading">Security</h1>
 
-            <div className="dashboard">
-                <SideBar />
-                <div className="productListContainer">
-                    <h1 id="productListHeading">Security</h1>
-
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pageSize={6}
-                        disableSelectionOnClick
-                        className="productListTable"
-                        autoHeight
-                        onRowClick={handleRowClick}
-                    />
+                        <DataGrid
+                            getRowId={(feedTable) => feedTable.securityId}
+                            rows={feedTable}
+                            columns={columns}
+                            pageSize={6}
+                            disableSelectionOnClick
+                            className="productListTable"
+                            autoHeight
+                            onRowClick={handleRowClick}
+                        />
+                    </div>
                 </div>
-            </div>
-            <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogTitle>Post Matured Security Reason</DialogTitle>
-        <DialogContent>
-          {selectedRow && (
-            <div>
-              {Object.entries(selectedRow).map(([key, value]) => (
-                <div key={key}>
-                  <strong>{key}:</strong> {value}
-                </div>
-              ))}
-            </div>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
-            Close
-          </Button>
-          </DialogActions>
-      </Dialog>
+            ) : (
+                <div>Loading...</div>
+            )}
+            {/* End of conditional rendering */}
         </>
     );
 };
